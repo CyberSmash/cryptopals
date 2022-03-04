@@ -1,3 +1,6 @@
+/**
+ * Break multibyte XOR "encryption".
+ */
 #include <iostream>
 #include <string>
 #include <vector>

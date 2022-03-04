@@ -55,4 +55,34 @@ char* hex_bytes_to_base64(vector<uint8_t> buffer);
 
 std::string vector_to_string(vector<uint8_t> vec);
 
+
+/**
+ * Splits an input string by a delimiter.
+ *
+ * NOTE: If the input string does not have a occurrence of delim in it, the entire
+ * string is returned as the only instance in the vector.
+ *
+ * This was created for level 13, but is generically useful.
+ *
+ * @param input - The input string
+ * @param delim - The delimiter to search for
+ *
+ * @return a vector of strings. This will be empty if there if no delimited strings are found.
+ */
+vector<std::string> split_by_delimiter(const std::string& input, char delim);
+
+
+/**
+ * Get a key value pair.
+ *
+ * Takes the string "key=value" as input, and returns a pair object of where "first" is
+ * the key and "second" is the value.
+ *
+ * This was created for level 13, but could be generically useful.
+ *
+ * @param kv_str - The key value string.
+ * @return A pair object with the key and value split out.
+ */
+std::pair<std::string, std::string> get_key_value(const std::string& kv_str);
+
 #endif //CRYPTOPALS_HELPERS_HPP

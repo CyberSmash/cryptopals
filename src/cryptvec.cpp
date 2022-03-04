@@ -8,6 +8,7 @@
 using std::vector;
 #include <algorithm>
 #include <string>
+#include <iomanip>
 #include "hamming.h"
 
 template <typename T>
@@ -15,6 +16,10 @@ cryptvec::cryptvec(const T& data)
 {
     resize(data.size());
     std::copy(data.begin(), data.end(), begin());
+}
+
+cryptvec::cryptvec(int size) {
+    this->resize(size);
 }
 
 cryptvec::cryptvec(const char* data)
@@ -109,6 +114,23 @@ unsigned int cryptvec::distance(const T& other)
                                     "current value");
 
     return calc_hamming_distance(*this, other);
+}
+
+
+std::ostream& operator<<(std::ostream& os, const cryptvec& cv)
+{
+
+    os << std::uppercase << std::hex;
+    int cnt = 0;
+    for (uint8_t c : cv)
+    {
+        if (cnt > 0 && cnt % 16 == 0)
+            os << std::endl;
+        os << std::setfill('0') << std::setw(2) << static_cast<unsigned int>(c) << " ";
+        cnt++;
+    }
+    os << std::dec;
+    return os;
 }
 
 

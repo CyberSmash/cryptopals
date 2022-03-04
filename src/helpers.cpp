@@ -95,3 +95,41 @@ std::string vector_to_string(vector<uint8_t> vec)
     std::transform(vec.begin(), vec.end(), result.begin(), [](uint8_t val) -> char {return static_cast<char>(val);});
     return result;
 }
+
+
+std::vector<std::string> split_by_delimiter(const std::string& input, char delim)
+{
+    std::vector<std::string>    result  = {};
+    std::string                 tmp     = {};
+    unsigned long               last    = 0;
+    unsigned long               pos     = 0;
+
+    while (pos != std::string::npos)
+    {
+        pos     = input.find(delim, last);
+        tmp     = input.substr(last, pos - last);
+        last    = pos + 1;
+        // There's probably a better way to check for this
+        // before constructing a new string ... but this works.
+        if (tmp.empty())
+            continue;
+
+        result.push_back(tmp);
+    }
+
+    return result;
+}
+
+
+std::pair<std::string, std::string> get_key_value(const std::string& kv_string)
+{
+    std::pair<std::string, std::string> result = {};
+    vector<std::string> key_value = split_by_delimiter(kv_string, '=');
+    if (key_value.size() != 2)
+        throw std::logic_error("I was expecting to only have exactly two results in k=v string. This is not the case.");
+
+    result.first = key_value[0];
+    result.second = key_value[1];
+
+    return result;
+}

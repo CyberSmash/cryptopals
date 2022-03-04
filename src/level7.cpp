@@ -1,3 +1,6 @@
+/**
+ * Decrypt the data in the file using AES-128 in CBC mode.
+ */
 #include <iostream>
 #include "file_ops.h"
 #include <vector>
@@ -9,7 +12,7 @@ int main ()
     std::cout << "The number of bytes in the file are: " << ct.size() << std::endl;
     std::string key = "YELLOW SUBMARINE";
 
-    auto decrypted_data = aes_decrypt_ecb(key, ct);
+    auto decrypted_data = aes_decrypt_ecb({key.begin(), key.end()}, ct);
 
     for (char c : decrypted_data)
     {

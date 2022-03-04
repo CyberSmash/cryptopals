@@ -1,3 +1,8 @@
+/**
+ * Identify which line in a file is encrypted with ECB mode.
+ *
+ * This basically just checks whether or not there is a repeating block.
+ */
 #include <iostream>
 using std::cout;
 using std::endl;
