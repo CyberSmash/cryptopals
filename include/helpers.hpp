@@ -38,7 +38,8 @@ vector<uint8_t> hex_str_to_bytes(const std::string& hex_string);
  *
  * @param buffer - The buffer to print.
  */
-void print_hex(vector<uint8_t> buffer);
+ template <typename T>
+void print_hex(T buffer);
 
 
 /**
@@ -84,5 +85,7 @@ vector<std::string> split_by_delimiter(const std::string& input, char delim);
  * @return A pair object with the key and value split out.
  */
 std::pair<std::string, std::string> get_key_value(const std::string& kv_str);
+
+
 
 #endif //CRYPTOPALS_HELPERS_HPP

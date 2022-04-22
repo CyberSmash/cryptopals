@@ -10,8 +10,11 @@ using std::vector;
 /**
  * Decrypts data given by ct with key using the AES algorithm.
  *
- * @TOOD: This is technically only AES128, meaning we should
+ * @TODO: This is technically only AES128, meaning we should
  * label it as such.
+ *
+ * @TODO: This function performs no error checking. It would be a good idea
+ * to implement it.
  *
  * @param key The AES key. Must be 16 bytes long.
  * @param ct The cipher text. Must be a muiltiple of
@@ -76,6 +79,9 @@ bool is_ecb(T arr);
  */
 template <typename T>
 unsigned int pad_pkcs7(T& arr, unsigned int block_size);
+
+template <typename T>
+T remove_pkcs7_padding(const T& arr, unsigned int max_block_size=AES_BLOCK_SIZE);
 
 /**
  * Generate a cryptographically secure key.

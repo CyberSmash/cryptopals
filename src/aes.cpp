@@ -28,6 +28,10 @@ T aes_decrypt_ecb(T key, T ct)
     delete[] decrypted;
     return ret;
 }
+template vector<uint8_t> aes_decrypt_ecb(vector<uint8_t> key, vector<uint8_t> ct);
+template cryptvec aes_decrypt_ecb(cryptvec key, cryptvec ct);
+
+
 
 template <typename T>
 T aes_encrypt_ecb(T key, T pt, bool add_padding)
@@ -150,6 +154,20 @@ unsigned int pad_pkcs7(T& arr, unsigned int block_size)
 template unsigned int pad_pkcs7(vector<uint8_t>& arr, unsigned int block_size);
 template unsigned int pad_pkcs7(cryptvec& arr, unsigned int block_size);
 
+template <typename T>
+T remove_pkcs7_padding(const T& arr, unsigned int max_block_size)
+{
+    if (arr.empty() || arr.size() < max_block_size)
+        throw std::invalid_argument("Cannot remove padding on an improperly sized container.");
+
+    uint8_t last_byte = arr.back();
+    if (last_byte > max_block_size)
+        throw std::invalid_argument("Invalid argument, max block size exceeded.");
+
+    return {arr.begin(), arr.end() - last_byte};
+}
+
+template cryptvec remove_pkcs7_padding(const cryptvec& arr, unsigned int max_block_size);
 
 template<typename T>
 T gen_random_key(unsigned int bytes) {
@@ -166,12 +184,7 @@ T gen_random_key(unsigned int bytes) {
 template vector<uint8_t> gen_random_key(unsigned int bytes);
 template cryptvec gen_random_key(unsigned int bytes);
 
-
-template vector<uint8_t> aes_decrypt_ecb(vector<uint8_t> key, vector<uint8_t> ct);
-template cryptvec aes_decrypt_ecb(cryptvec key, cryptvec ct);
-
 template vector<uint8_t> aes_encrypt_ecb(vector<uint8_t> key, vector<uint8_t> ct, bool add_padding);
-
 
 template bool is_ecb(std::vector<uint8_t> arr);
 template bool is_ecb(cryptvec arr);

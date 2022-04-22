@@ -10,7 +10,7 @@ using std::vector;
 #include <string>
 #include <iomanip>
 #include "hamming.h"
-
+#include "base64.h"
 template <typename T>
 cryptvec::cryptvec(const T& data)
 {
@@ -131,6 +131,31 @@ std::ostream& operator<<(std::ostream& os, const cryptvec& cv)
     }
     os << std::dec;
     return os;
+}
+
+
+cryptvec cryptvec::base64_decode(const std::string& b64_data)
+{
+    cryptvec    ret {};
+    int         bytes_decoded   = 0;
+    int         decoded_len     = 0;
+
+    if (b64_data.empty())
+        throw std::invalid_argument("Cannot decode base64 string if its empty.");
+
+    decoded_len = Base64decode_len(b64_data.data());
+    ret.resize(decoded_len);
+
+    bytes_decoded = Base64decode(reinterpret_cast<char*>(ret.data()), b64_data.data());
+    if (bytes_decoded < decoded_len)
+        throw std::logic_error("Error: not enough bytes were decoded!");
+
+    return ret;
+}
+
+std::string cryptvec::to_string()
+{
+    return {begin(), end() };
 }
 
 

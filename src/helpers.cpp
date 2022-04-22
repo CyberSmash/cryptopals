@@ -58,21 +58,23 @@ vector<uint8_t> hex_str_to_bytes(const std::string& hex_string)
     return out_buffer;
 }
 
-
-void print_hex(vector<uint8_t> buffer)
+template <typename T>
+void print_hex(T buffer)
 {
-    for (int i = 0; i < buffer.size(); i++)
+    int count = 0;
+    for (auto it = begin(buffer); it != end(buffer); it++, count++)
     {
-        if (i > 0 && i % 16 == 0)
+        if (count > 0 && count % 16 == 0)
         {
             puts("\n");
         }
 
-        printf("%02X ", buffer[i]);
+        printf("%02X ", *it);
     }
     puts("\n");
 }
-
+template void print_hex(vector<uint8_t> buffer);
+template void print_hex(std::string str);
 
 char* hex_bytes_to_base64(vector<uint8_t> buffer)
 {

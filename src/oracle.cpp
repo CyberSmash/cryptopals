@@ -125,24 +125,12 @@ uint8_t break_level12_single_byte_oracle(const cryptvec& expected_ct, cryptvec t
 }
 
 
-std::map<std::string, std::string> level13_parse_kv_string(const std::string& kv_string)
+/*
+cryptvec level13_parse_profile(const cryptvec& encrypted_profile)
 {
-    std::map<std::string, std::string> result = {};
-    std::vector<std::string> key_value_pairs = split_by_delimiter(kv_string, '&');
-    if (key_value_pairs.empty())
-    {
-        // Return an empty map of key value pairs.
-        return result;
-    }
+    if (level13_aes_key.empty())
+        throw std::logic_error("Error: The AES key for level 13 has not been set. You must first generate a profile "
+                               "before attempting to decrypt one.");
 
-    for (auto& kv_pair : key_value_pairs)
-    {
-        std::pair<std::string, std::string> kvp = get_key_value(kv_pair);
-        if (kvp.first.empty() || kvp.second.empty())
-            continue;
-        result.insert(kvp);
-    }
-    return result;
-}
-
-
+    cryptvec pt = aes_decrypt_ecb(level13_aes_key, encrypted_profile);
+}*/

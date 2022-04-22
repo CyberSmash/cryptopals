@@ -64,6 +64,29 @@ cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_bl
  */
 uint8_t break_level12_single_byte_oracle(const cryptvec& expected_ct, cryptvec test_pt, unsigned int ct_offset);
 
-std::map<std::string, std::string> level13_parse_kv_string(const std::string& kv_string);
+/**
+ * Parses a key=value string delimited by an '&'.
+ *
+ * This was created for level 13.
+ *
+ * Example "foo=bar&baz=qux&zap=zazzle"
+ *
+ * @param kv_string The string to parse.
+ * @return A dictionary where the first is the key and second is the value all represented by strings.
+ */
+//std::map<std::string, std::string> level13_parse_kv_string(const std::string& kv_string);
+
+/**
+ * Generates a key value string based on a map.
+ *
+ * TODO: We don't check for fields, but we should.
+ *
+ * Expected fields: "role", "email", and "uid".
+ *
+ * @param profile The profile map to use.
+ * @return
+ */
+//std::string level13_encode_profile(std::map<std::string, std::string>& profile);
+
 
 #endif //CRYPTOPALS_ORACLE_H
