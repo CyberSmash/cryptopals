@@ -196,7 +196,7 @@ int main()
     // 8 -|email=AAAAAAAA&u|id=10&role=user!|
     // 9 -|email=AAAAAAAAA&|uid=10&role=user|!!!!!!!!!!!!!!!!
     // 10-|email=AAAAAAAAAA|&uid=10&role=use|r!!!!!!!!!!!!!!!
-    // Since our padding is attempting to fill in the block we control, we cannot rely on the start of a new block to re ly
+    // Since our padding is attempting to fill in the block we control, we cannot rely on the start of a new block to rely
     // on that, but instead the start of a new block + 1, which indicates we have successfully filled our current block.
 
     std::string padding(fake_email.length() + 1, 'A');

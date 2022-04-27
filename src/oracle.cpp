@@ -45,7 +45,7 @@ cryptvec level11_encryption_oracle(const cryptvec& pt, bool& is_ecb)
 }
 
 
-cryptvec level12_encryption_oracle(const cryptvec& pt)
+cryptvec level12_encryption_oracle(const cryptvec& pt, const cryptvec& prefix)
 {
     // Generate a key if one doesn't exist yet.
     static cryptvec key {};
@@ -53,6 +53,7 @@ cryptvec level12_encryption_oracle(const cryptvec& pt)
     {
         key = gen_random_key<cryptvec>(AES_BLOCK_SIZE);
     }
+
     // We don't base64 decode this and pretend we don't know what it says.
     const char* static_plaintext = "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg"
                                    "aGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBq"
@@ -63,6 +64,10 @@ cryptvec level12_encryption_oracle(const cryptvec& pt)
     cryptvec full_pt {};
     Base64decode(reinterpret_cast<char *>(decoded_secret.data()), static_plaintext);
 
+    if (!prefix.empty())
+    {
+        full_pt.insert(full_pt.end(), prefix.begin(), prefix.end());
+    }
     full_pt.insert(full_pt.end(), pt.begin(), pt.end());
     full_pt.insert(full_pt.end(), decoded_secret.begin(), decoded_secret.end());
 
@@ -85,7 +90,7 @@ cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_bl
 
     for (int i = 1; i < block_offset - num_pad_bytes; i++)
     {
-        cryptvec ct = level12_encryption_oracle(filler);
+        cryptvec ct = level12_encryption_oracle(filler, {});
         cryptvec first_block = {ct.begin() + (block_offset - block_size), ct.begin() + block_offset};
 
         // Copy in the bytes we already know.
@@ -113,7 +118,7 @@ uint8_t break_level12_single_byte_oracle(const cryptvec& expected_ct, cryptvec t
     for (unsigned int val = 0; val < 256; val++)
     {
         test_pt.back() = val;
-        cryptvec ct = level12_encryption_oracle(test_pt);
+        cryptvec ct = level12_encryption_oracle(test_pt, {});
         bool eq = std::equal(expected_ct.begin(), expected_ct.end(), ct.begin() + ct_offset);
         if (eq)
         {

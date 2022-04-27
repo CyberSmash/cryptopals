@@ -31,7 +31,7 @@ cryptvec level11_encryption_oracle(const cryptvec& pt, bool& is_ecb);
  * @param pt The plaintext passed in to encrypt.
  * @return A buffer of ciphertext.
  */
-cryptvec level12_encryption_oracle(const cryptvec& pt);
+cryptvec level12_encryption_oracle(const cryptvec& pt, const cryptvec& prefix);
 
 /**
  * Breaks an ECB Oracle where some secret data is added to the end of the provided plaintext

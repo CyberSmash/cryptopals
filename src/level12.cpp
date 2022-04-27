@@ -12,7 +12,7 @@
 int main()
 {
     cryptvec pt {};
-    cryptvec ct = level12_encryption_oracle(pt);
+    cryptvec ct = level12_encryption_oracle(pt, {});
 
     std::cout << "Encrypted data: " << std::endl;
     std::cout << ct << std::endl;
@@ -26,7 +26,7 @@ int main()
    for (int i = 0; i < 512; i++)
    {
        pt.push_back(0x41);
-       ct = level12_encryption_oracle(pt);
+       ct = level12_encryption_oracle(pt, {});
        if (ct.size() > original_ct_size)
        {
            block_size = ct.size() - original_ct_size;
@@ -47,7 +47,8 @@ int main()
     pt.resize(block_size * 2);
     std::fill(pt.begin(), pt.end(), 'A');
 
-    ct = level12_encryption_oracle(pt);
+    // Detect that we are using ECB.
+    ct = level12_encryption_oracle(pt, {});
     bool ecb = is_ecb(ct);
     if (!ecb)
     {
