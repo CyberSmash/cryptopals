@@ -81,22 +81,39 @@ cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_bl
     cryptvec filler{};
     cryptvec pt{};
 
-    unsigned int block_offset = block_size * (total_blocks);
+    // This variable refers to the offset of the block we which contains
+    // some number secret text bytes and filler.
+    unsigned int block_offset = block_size * total_blocks;
+
+    // Generate filler that will be one byte shy of a full block size. This will also be
+    // the size of the secret plaintext. It must be at least the same size in order for us
+    // to "pull" the entire secret text our target block. This way we only ever have
+    // to look at the last block of filler.
     filler.resize(block_offset - 1);
+    // Fill the filler vector with garbage, but consistant garbage.
     std::fill(filler.begin(), filler.end(), 'A');
 
+    // We create a plaintext buffer filled with either all 'A's (filler)
+    // or filler + our plaintext.
     pt.resize(block_offset);
     std::fill(pt.begin(), pt.end(), 'A');
 
+
     for (int i = 1; i < block_offset - num_pad_bytes; i++)
     {
+        // Encrypt our filler. This will produce a series of encrypted blocks, where the last block
+        // of our padded text will contain some number of bytes of our secret text.
         cryptvec ct = level12_encryption_oracle(filler, {});
-        cryptvec first_block = {ct.begin() + (block_offset - block_size), ct.begin() + block_offset};
 
-        // Copy in the bytes we already know.
+        // Get the block that contains all known filler + one byte (or more) of secret text.
+        // This will become the ciphertext we will look for when we try to brute force all possible
+        // 256 values.
+        cryptvec block_to_crack = {ct.begin() + (block_offset - block_size), ct.begin() + block_offset};
+
+        // Create a vector which will be our "guess" of our existing plaintext.
         std::copy(known_pt.begin(), known_pt.end(), pt.end() - i);
         try {
-            uint8_t val = break_level12_single_byte_oracle(first_block, pt, block_offset - block_size);
+            uint8_t val = break_level12_single_byte_oracle(block_to_crack, pt, block_offset - block_size);
             known_pt.push_back(val);
         }
         catch (std::logic_error& ex)
@@ -104,7 +121,7 @@ cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_bl
             std::cout << "There was an error finding the value at index " << i << std::endl;
             break;
         }
-
+        // Remove some more filler, to pull another byte into our block.
         filler.pop_back();
     }
 
@@ -112,20 +129,53 @@ cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_bl
 }
 
 
+/**
+ * We are attempting to do the following
+ *
+ * If our secret message is "this-is-a-secret-message" We are trying to set up
+ * our encrypted blocks in the following way:
+ *
+ * |AAAAAAAAAAAAAAAt|his-is-a-secret-message|
+ *
+ * AAAAAAAAAAAAAt is our test_pt.
+ * This means in the first case, we want 15 bytes of padding (one shy of the block size).
+ * Then in this function we loop through the
+ *
+ * On the second go-around, we know one byte of the plaintext so we incorporate this into our answer. Our
+ * test_pt becomes:
+ *
+ * AAAAAAAAAAAAAAt. As this is now 15 bytes long it has the effect of pulling one more (and only one) unknown
+ * byte into the block, so it looks like this:
+ *
+ * |AAAAAAAAAAAAAAth|is-a-secret-message|
+ *
+ * Now we only need to search for the 16th byte, as we already know the 15th byte.
+ * @param expected_ct
+ * @param test_pt
+ * @param ct_offset
+ * @return
+ */
 uint8_t break_level12_single_byte_oracle(const cryptvec& expected_ct, cryptvec test_pt, unsigned int ct_offset)
 {
-
+    // Loop through all 256 possible byte values.
     for (unsigned int val = 0; val < 256; val++)
     {
+        // Set the last byte in our test plaintext to be the guessed value.
         test_pt.back() = val;
+        // Encrypt the plaintext with the guessed value.
         cryptvec ct = level12_encryption_oracle(test_pt, {});
+
+        // Determine if our encrypted guessed plaintext is equal to the expected ciphertext.
         bool eq = std::equal(expected_ct.begin(), expected_ct.end(), ct.begin() + ct_offset);
         if (eq)
         {
+            // We have discovered a value that causes our encrypted plaintext to equal our
+            // expected ciphertext.
             return val;
         }
     }
 
+    // Nothing matches. This is bad, and unrecoverable a t this level.
     throw std::logic_error("Cannot find plaintext value!");
 }
 
