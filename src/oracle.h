@@ -42,11 +42,12 @@ cryptvec level12_encryption_oracle(const cryptvec& pt, const cryptvec& prefix);
  * Additionally it must reuse the same key every time.
  *
  * @param block_size The block size of the cipher.
- * @param total_blocks The total number of blocks in the secret
+ * @param num_secret_blocks The total number of blocks that make up the secret.
  * @param num_pad_bytes The number of padding bytes added to the secret.
  * @return A cryptvec that contains the secret data that was appended to the plaintext.
  */
-cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_blocks, unsigned int num_pad_bytes);
+cryptvec break_level12_ecb_oracle(unsigned int block_size,    unsigned int num_secret_blocks,
+                                  unsigned int num_pad_bytes);
 
 /**
  * Finds a single byte in the level12 ecb oracle breaker.

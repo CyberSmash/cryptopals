@@ -37,12 +37,12 @@ int main()
            padding_bytes += 1;
        }
    }
-   unsigned int num_blocks = original_ct_size / block_size;
+   unsigned int ciphertext_blocks = original_ct_size / block_size;
 
     std::cout << "[+] Block size detected: " << block_size << std::endl;
     std::cout << "[+] Padding bytes detected: " << padding_bytes << std::endl;
     std::cout << "[+] Size of secret plaintext: " << original_ct_size - padding_bytes << std::endl;
-    std::cout << "[+] Number of blocks: " << num_blocks << std::endl;
+    std::cout << "[+] Number of blocks: " << ciphertext_blocks << std::endl;
 
     pt.resize(block_size * 2);
     std::fill(pt.begin(), pt.end(), 'A');
@@ -57,7 +57,7 @@ int main()
     }
     std::cout << "[+] Cipher appears to be in ECB mode." << std::endl;
 
-    cryptvec known_pt = break_level12_ecb_oracle(block_size, num_blocks, padding_bytes);
+    cryptvec known_pt = break_level12_ecb_oracle(block_size, ciphertext_blocks, padding_bytes);
     std::string recovered_block = {known_pt.begin(), known_pt.end()};
 
     std::cout << "PT: " << recovered_block << std::endl;

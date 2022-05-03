@@ -75,7 +75,8 @@ cryptvec level12_encryption_oracle(const cryptvec& pt, const cryptvec& prefix)
 }
 
 
-cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_blocks, unsigned int num_pad_bytes)
+cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int num_secret_blocks,
+                                  unsigned int num_pad_bytes)
 {
     cryptvec known_pt {};
     cryptvec filler{};
@@ -83,7 +84,7 @@ cryptvec break_level12_ecb_oracle(unsigned int block_size, unsigned int total_bl
 
     // This variable refers to the offset of the block we which contains
     // some number secret text bytes and filler.
-    unsigned int block_offset = block_size * total_blocks;
+    unsigned int block_offset = (block_size * num_secret_blocks);
 
     // Generate filler that will be one byte shy of a full block size. This will also be
     // the size of the secret plaintext. It must be at least the same size in order for us
