@@ -216,9 +216,9 @@ int main() {
     //unsigned int num_secret_blocks = ( / block_size ) - num_prefix_blocks;
 
     std::cout << "Smallest CT size: " << smallest_size << std::endl;
-    std::cout << "NUmber of secret blocks: " << 9 << std::endl;
+    std::cout << "Number of secret blocks: " << ((smallest_size + num_random_pad_bytes) / 16) - num_prefix_blocks << std::endl;
     cryptvec known_pt = break_level14_ecb_oracle(block_size,
-                             9,
+                                                 ((smallest_size + num_random_pad_bytes) / 16) - num_prefix_blocks,
                              padding_bytes,
                              num_prefix_blocks,
                              num_random_pad_bytes
