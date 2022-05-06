@@ -71,6 +71,20 @@ template <typename T>
 bool is_ecb(T arr);
 
 /**
+ * Finds the start of a adjacent repeating blocks of ciphertext.
+ *
+ * This is similar to is_ecb except that it will return the location of the first repated block and will
+ * only look for adjacent blocks.
+ *
+ * @tparam T A type of either cryptvec or vector<uint8_t>.
+ * @param arr A iteratble array containing ciphertext.
+ * @return -1 if there is no repeating blocks adjacent. The start index of the first repeated block if a repeated block
+ * exists.
+ */
+template <typename T>
+int find_ecb(T arr);
+
+/**
  * Pad the data out to a block_size.
  * @tparam T Some sort of iterable, like a cryptvec, or vector.
  * @param arr The array to add.

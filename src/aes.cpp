@@ -141,6 +141,27 @@ bool is_ecb(T arr)
 }
 
 template <typename T>
+int find_ecb(T arr)
+{
+    unsigned int match_count = 0;
+    for (int idx = 0; idx < arr.size() - AES_BLOCK_SIZE; idx++)
+    {
+
+        if (arr[idx] == arr[idx+AES_BLOCK_SIZE])
+            match_count += 1;
+        else
+            match_count = 0;
+
+        if (match_count == AES_BLOCK_SIZE)
+            return idx - AES_BLOCK_SIZE + 1;
+    }
+    return -1;
+}
+template int find_ecb(cryptvec arr);
+template int find_ecb(vector<uint8_t> arr);
+
+
+template <typename T>
 unsigned int pad_pkcs7(T& arr, unsigned int block_size)
 {
     uint8_t padding_needed = block_size - (arr.size() % block_size);
