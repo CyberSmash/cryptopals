@@ -94,6 +94,16 @@ int find_ecb(T arr);
 template <typename T>
 unsigned int pad_pkcs7(T& arr, unsigned int block_size);
 
+/**
+ * Validates PKCS7 and returns the number of padding bytes to be removed.
+ * @tparam T A cryptvec or vector<uint8_t>
+ * @param arr The data to have the padding removed.
+ * @param block_size The block size.
+ * @return The number of padding bytes to be removed.
+ */
+template <typename T>
+unsigned int validate_pkcs7(const T& arr, unsigned int block_size);
+
 template <typename T>
 T remove_pkcs7_padding(const T& arr, unsigned int max_block_size=AES_BLOCK_SIZE);
 

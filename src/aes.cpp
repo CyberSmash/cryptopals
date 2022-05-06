@@ -176,14 +176,36 @@ template unsigned int pad_pkcs7(vector<uint8_t>& arr, unsigned int block_size);
 template unsigned int pad_pkcs7(cryptvec& arr, unsigned int block_size);
 
 template <typename T>
+unsigned int validate_pkcs7(const T& arr, unsigned int block_size)
+{
+    if (arr.empty() || arr.size() % block_size != 0)
+    {
+        throw std::logic_error("Cannot remove PKCS7 padding on an empty array.");
+    }
+
+    uint8_t last_pad_byte = arr.back();
+    if (last_pad_byte > AES_BLOCK_SIZE)
+    {
+        throw std::logic_error("Invalid PKCS7 Padding: The pad value is bigger than the block size.");
+    }
+    for (int idx = arr.size() - 1; idx > arr.size() - last_pad_byte; idx--)
+    {
+        if (arr[idx] != last_pad_byte)
+            throw std::logic_error("Invalid PKCS8 Padding: The padding is not uniform.");
+    }
+    return last_pad_byte;
+}
+template unsigned int validate_pkcs7(const cryptvec& arr, unsigned int block_size);
+template unsigned int validate_pkcs7(const vector<uint8_t>& arr, unsigned int block_size);
+
+
+template <typename T>
 T remove_pkcs7_padding(const T& arr, unsigned int max_block_size)
 {
     if (arr.empty() || arr.size() < max_block_size)
         throw std::invalid_argument("Cannot remove padding on an improperly sized container.");
 
-    uint8_t last_byte = arr.back();
-    if (last_byte > max_block_size)
-        throw std::invalid_argument("Invalid argument, max block size exceeded.");
+    uint8_t last_byte = validate_pkcs7(arr, max_block_size);
 
     return {arr.begin(), arr.end() - last_byte};
 }

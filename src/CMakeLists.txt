@@ -20,6 +20,7 @@ add_executable(level11 level11.cpp aes.cpp cryptvec.cpp hamming.cpp helpers.cpp 
 add_executable(level12 level12.cpp aes.cpp cryptvec.cpp hamming.cpp helpers.cpp base64.c file_ops.cpp oracle.cpp)
 add_executable(level13 level13.cpp aes.cpp cryptvec.cpp hamming.cpp helpers.cpp base64.c file_ops.cpp oracle.cpp)
 add_executable(level14 level14.cpp aes.cpp cryptvec.cpp hamming.cpp helpers.cpp base64.c file_ops.cpp oracle.cpp)
+add_executable(level15 level15.cpp aes.cpp cryptvec.cpp hamming.cpp helpers.cpp base64.c file_ops.cpp oracle.cpp)
 
 target_link_libraries(level4 OpenSSL::Crypto)
 target_link_libraries(level7 OpenSSL::Crypto)
@@ -30,4 +31,5 @@ target_link_libraries(level11 OpenSSL::Crypto)
 target_link_libraries(level12 OpenSSL::Crypto)
 target_link_libraries(level13 OpenSSL::Crypto)
 target_link_libraries(level14 OpenSSL::Crypto)
+target_link_libraries(level15 OpenSSL::Crypto)
 
