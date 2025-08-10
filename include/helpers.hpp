@@ -86,6 +86,30 @@ vector<std::string> split_by_delimiter(const std::string& input, char delim);
  */
 std::pair<std::string, std::string> get_key_value(const std::string& kv_str);
 
+/**
+ * Replace first occurrence of a string.
+ *
+ * This finds the first occurrence and replaces it in place.
+ *
+ * @param needle The thing to find and replace
+ * @param haystack The total string
+ * @param replacement The thing to replace the needle with
+ * @param skip Where to start (index) into the string
+ * @return The location the replacement was made in the original string.
+ * This will be std::string::npos if needle is not found.
+ */
+size_t find_and_replace(const std::string& needle, std::string& haystack, const std::string& replacement, size_t skip);
+
+/**
+ * Replace all occurrences of a string.
+ *
+ * Will continue looking for more needles, and replacing them with the replacement.
+ * @param needle The thing to find.
+ * @param haystack The thing to search through
+ * @param replacement The replacement to replace the needle with.
+ * @return The final string with all replacements.
+ */
+std::string find_and_replace_all(const std::string& needle, const std::string& haystack, const std::string& replacement);
 
 
 #endif //CRYPTOPALS_HELPERS_HPP

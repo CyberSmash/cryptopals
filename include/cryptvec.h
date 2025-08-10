@@ -4,6 +4,7 @@
 
 #ifndef CRYPTOPALS_CRYPTVEC_H
 #define CRYPTOPALS_CRYPTVEC_H
+
 #include <vector>
 #include <iostream>
 using std::vector;

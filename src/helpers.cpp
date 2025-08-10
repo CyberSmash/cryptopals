@@ -135,3 +135,36 @@ std::pair<std::string, std::string> get_key_value(const std::string& kv_string)
 
     return result;
 }
+
+size_t find_and_replace(const std::string& needle, std::string& haystack, const std::string& replacement, size_t skip)
+{
+
+    size_t it = haystack.find(needle, skip);
+    if (it == std::string::npos)
+        return it;
+
+    haystack.replace(it, needle.size(), replacement);
+    return it;
+}
+
+std::string find_and_replace_all(const std::string& needle, const std::string& haystack, const std::string& replacement)
+{
+    std::string next = haystack;
+    size_t current_pos = 0;
+    do
+    {
+        auto new_offset = find_and_replace(needle, next, replacement, current_pos);
+        if (new_offset == std::string::npos) {
+            break;
+        }
+        current_pos += new_offset;
+        current_pos += 2;
+
+        if (next.length() < current_pos) {
+            break;
+        }
+    } while (current_pos != std::string::npos);
+
+    return next;
+}
+
